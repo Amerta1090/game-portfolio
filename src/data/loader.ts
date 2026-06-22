@@ -1,13 +1,22 @@
+import { z } from 'zod';
+import {
+  ProfileSchema,
+  SkillsSchema,
+  ProjectsSchema,
+  ExperienceSchema,
+  CertificationSchema,
+  LicensesCertificationsSchema,
+  HonorSchema,
+  VolunteeringSchema,
+  AdditionalInfoSchema,
+} from '../types/data';
+
 import type {
   Profile,
   Skills,
   Projects,
-  Experiences,
-  Certifications,
   LicensesCertifications,
-  Honors,
-  Volunteerings,
-  AdditionalInfos,
+  AdditionalInfo,
 } from '../types/data';
 
 import profileRaw from '../../data/profile.json';
@@ -24,22 +33,39 @@ export interface GameData {
   profile: Profile;
   skills: Skills;
   projects: Projects;
-  experiences: Experiences;
-  certifications: Certifications;
+  experiences: Array<z.infer<typeof ExperienceSchema>>;
+  certifications: Array<z.infer<typeof CertificationSchema>>;
   licensesCertifications: LicensesCertifications;
-  honors: Honors;
-  volunteering: Volunteerings;
-  additionalInfo: AdditionalInfos;
+  honors: Array<z.infer<typeof HonorSchema>>;
+  volunteering: Array<z.infer<typeof VolunteeringSchema>>;
+  additionalInfo: AdditionalInfo;
+}
+
+function validateOrThrow<T>(schema: z.ZodSchema<T>, data: unknown, label: string): T {
+  const result = schema.safeParse(data);
+  if (!result.success) {
+    console.error(`[Data Loader] Validation failed for ${label}:`, result.error.issues);
+    throw new Error(`Data validation error: ${label}`);
+  }
+  return result.data;
 }
 
 export const gameData: GameData = {
-  profile: profileRaw as Profile,
-  skills: skillsRaw as Skills,
-  projects: projectsRaw as Projects,
-  experiences: experiencesRaw as Experiences,
-  certifications: certificationsRaw as Certifications,
-  licensesCertifications: licensesCertificationsRaw as LicensesCertifications,
-  honors: honorsRaw as Honors,
-  volunteering: volunteeringRaw as Volunteerings,
-  additionalInfo: additionalInfoRaw as AdditionalInfos,
+  profile: validateOrThrow(ProfileSchema, profileRaw, 'profile'),
+  skills: validateOrThrow(SkillsSchema, skillsRaw, 'skills'),
+  projects: validateOrThrow(ProjectsSchema, projectsRaw, 'projects'),
+  experiences: Array.isArray(experiencesRaw)
+    ? experiencesRaw.map((item) => validateOrThrow(ExperienceSchema, item, 'experience'))
+    : [],
+  certifications: Array.isArray(certificationsRaw)
+    ? certificationsRaw.map((item) => validateOrThrow(CertificationSchema, item, 'certification'))
+    : [],
+  licensesCertifications: validateOrThrow(LicensesCertificationsSchema, licensesCertificationsRaw, 'licenses_certifications'),
+  honors: Array.isArray(honorsRaw)
+    ? honorsRaw.map((item) => validateOrThrow(HonorSchema, item, 'honor'))
+    : [],
+  volunteering: Array.isArray(volunteeringRaw)
+    ? volunteeringRaw.map((item) => validateOrThrow(VolunteeringSchema, item, 'volunteering'))
+    : [],
+  additionalInfo: validateOrThrow(AdditionalInfoSchema, additionalInfoRaw, 'additional_info'),
 };

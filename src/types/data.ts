@@ -64,73 +64,79 @@ export const ProjectsSchema = z.object({
 });
 
 export const ExperienceSchema = z.object({
-  role: z.string(),
+  id: z.string(),
   company: z.string(),
+  role: z.string(),
+  type: z.string(),
+  start_date: z.string(),
+  end_date: z.string().nullable(),
   location: z.string(),
-  period: z.string(),
   highlights: z.array(z.string()),
   technologies: z.array(z.string()),
-});
-
-export const ExperiencesSchema = z.object({
-  experiences: z.array(ExperienceSchema),
+  url: z.string().nullable(),
 });
 
 export const CertificationSchema = z.object({
   title: z.string(),
   issuer: z.string(),
-  issued: z.string(),
-  expires: z.string().optional(),
-  credential_url: z.string().optional(),
-  skills: z.array(z.string()).optional(),
-});
-
-export const CertificationsSchema = z.object({
-  certifications: z.array(CertificationSchema),
+  date: z.string().nullable(),
+  credential_id: z.string().nullable(),
+  skills: z.array(z.string()),
+  url: z.string().nullable(),
 });
 
 export const LicenseCertificationSchema = z.object({
   title: z.string(),
   issuer: z.string(),
-  issued: z.string(),
-  expires: z.string().optional(),
-  credential_url: z.string().optional(),
+  issue_date: z.string().nullable(),
+  expiration_date: z.string().nullable(),
+  credential_id: z.string().nullable(),
+  skills: z.array(z.string()),
 });
 
 export const LicensesCertificationsSchema = z.object({
-  licenses_certifications: z.array(LicenseCertificationSchema),
+  licenses_and_certifications: z.array(LicenseCertificationSchema),
 });
 
 export const HonorSchema = z.object({
   title: z.string(),
-  issuer: z.string(),
+  event: z.string(),
   date: z.string(),
-  description: z.string(),
-});
-
-export const HonorsSchema = z.object({
-  honors: z.array(HonorSchema),
+  category: z.string(),
+  description: z.string().nullable(),
 });
 
 export const VolunteeringSchema = z.object({
   role: z.string(),
   organization: z.string(),
-  location: z.string(),
-  period: z.string(),
+  cause: z.string(),
+  start_date: z.string(),
+  end_date: z.string(),
   highlights: z.array(z.string()),
 });
 
-export const VolunteeringsSchema = z.object({
-  volunteering: z.array(VolunteeringSchema),
+export const LanguageInfoSchema = z.object({
+  language: z.string(),
+  proficiency: z.string(),
+  additional_info: z.string().nullable(),
+});
+
+export const VolunteeringEntrySchema = z.object({
+  role: z.string(),
+  organization: z.string(),
+  duration: z.string(),
+  cause: z.string(),
+  description: z.string(),
+});
+
+export const ContactLinksSchema = z.object({
+  linkedin: z.string().url(),
 });
 
 export const AdditionalInfoSchema = z.object({
-  title: z.string(),
-  content: z.string(),
-});
-
-export const AdditionalInfosSchema = z.object({
-  additional_info: z.array(AdditionalInfoSchema),
+  languages: z.array(LanguageInfoSchema),
+  volunteering: z.array(VolunteeringEntrySchema),
+  contact_links: ContactLinksSchema,
 });
 
 export type Profile = z.infer<typeof ProfileSchema>;
@@ -140,14 +146,9 @@ export type Skills = z.infer<typeof SkillsSchema>;
 export type Project = z.infer<typeof ProjectSchema>;
 export type Projects = z.infer<typeof ProjectsSchema>;
 export type Experience = z.infer<typeof ExperienceSchema>;
-export type Experiences = z.infer<typeof ExperiencesSchema>;
 export type Certification = z.infer<typeof CertificationSchema>;
-export type Certifications = z.infer<typeof CertificationsSchema>;
 export type LicenseCertification = z.infer<typeof LicenseCertificationSchema>;
 export type LicensesCertifications = z.infer<typeof LicensesCertificationsSchema>;
 export type Honor = z.infer<typeof HonorSchema>;
-export type Honors = z.infer<typeof HonorsSchema>;
 export type Volunteering = z.infer<typeof VolunteeringSchema>;
-export type Volunteerings = z.infer<typeof VolunteeringsSchema>;
 export type AdditionalInfo = z.infer<typeof AdditionalInfoSchema>;
-export type AdditionalInfos = z.infer<typeof AdditionalInfosSchema>;
