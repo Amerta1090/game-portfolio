@@ -16,29 +16,29 @@ export function TransitionOverlay() {
       const timer = setTimeout(() => setShow(false), 1200);
       return () => clearTimeout(timer);
     }
+    setShow(false);
     return;
   }, [screen, activeRoom]);
 
   return (
     <AnimatePresence>
-      {(show || (screen === 'room' && show === false)) && (
+      {show && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-dark pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: show ? 1 : 0 }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {show && (
-            <motion.p
-              className="text-neon font-game text-2xl tracking-wider"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-            >
-              {roomLabel}
-            </motion.p>
-          )}
+          <motion.p
+            className="text-neon font-game text-2xl tracking-wider"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
+            {roomLabel}
+          </motion.p>
         </motion.div>
       )}
     </AnimatePresence>

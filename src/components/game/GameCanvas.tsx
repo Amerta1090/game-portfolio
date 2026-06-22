@@ -6,10 +6,13 @@ import { Lobby } from '../rooms/Lobby';
 import { IdentityCore } from '../rooms/IdentityCore';
 import { SkillChamber } from '../rooms/SkillChamber';
 import { ProjectLab } from '../rooms/ProjectLab';
+import { CareerHall } from '../rooms/CareerHall';
+import { AchievementGallery } from '../rooms/AchievementGallery';
 import type { AABB } from '../../utils/collision';
 
 const LOBBY_BOUNDS: AABB = { minX: -11, maxX: 11, minZ: -11, maxZ: 11 };
 const ROOM_BOUNDS: AABB = { minX: -9, maxX: 9, minZ: -9, maxZ: 9 };
+const CAREER_BOUNDS: AABB = { minX: -6, maxX: 6, minZ: -17, maxZ: 17 };
 
 function Scene() {
   const screen = useGameStore((s) => s.screen);
@@ -50,6 +53,26 @@ function Scene() {
       return (
         <>
           <ProjectLab />
+          <Player bounds={ROOM_BOUNDS} />
+          <CameraController />
+        </>
+      );
+    }
+
+    if (activeRoom === 'career') {
+      return (
+        <>
+          <CareerHall />
+          <Player bounds={CAREER_BOUNDS} />
+          <CameraController />
+        </>
+      );
+    }
+
+    if (activeRoom === 'achievements') {
+      return (
+        <>
+          <AchievementGallery />
           <Player bounds={ROOM_BOUNDS} />
           <CameraController />
         </>

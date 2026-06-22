@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useGameStore } from '../../game/stores/gameStore';
+import { useProgressStore } from '../../game/stores/progressStore';
 import { InteractableObject } from '../game/InteractableObject';
 import type { RoomId } from '../../types/game';
 import { audioManager } from '../../utils/audio';
@@ -8,14 +9,16 @@ interface DoorConfig {
   id: RoomId;
   position: [number, number, number];
   label: string;
+  locked?: boolean;
+  lockReason?: string;
 }
 
 const DOORS: DoorConfig[] = [
   { id: 'identity', position: [0, 1.25, -11], label: 'Identity Core' },
   { id: 'skills', position: [11, 1.25, 0], label: 'Skill Chamber' },
   { id: 'projects', position: [0, 1.25, 11], label: 'Project Lab' },
-  { id: 'career', position: [-11, 1.25, 0], label: 'Career Hall' },
-  { id: 'achievements', position: [7.5, 1.25, -7.5], label: 'Achievement Gallery' },
+  { id: 'career', position: [-11, 1.25, 0], label: 'Career Hall', locked: true, lockReason: 'Complete 2 mini-games to unlock' },
+  { id: 'achievements', position: [7.5, 1.25, -7.5], label: 'Achievement Gallery', locked: true, lockReason: 'Visit 4 rooms to unlock' },
 ];
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
@@ -55,9 +58,17 @@ function AmbientParticles() {
 export function Lobby() {
   const setScreen = useGameStore((s) => s.setScreen);
   const setActiveRoom = useGameStore((s) => s.setActiveRoom);
+  const fragments = useProgressStore((s) => s.fragments);
+  const visitedRooms = useProgressStore((s) => s.visitedRooms);
+  const visitRoom = useProgressStore((s) => s.visitRoom);
 
-  function handleEnterRoom(roomId: RoomId) {
+  const isCareerUnlocked = fragments.length >= 2;
+  const isAchievementUnlocked = visitedRooms.length >= 4;
+
+  function handleEnterRoom(roomId: RoomId, isLocked: boolean) {
+    if (isLocked) return;
     return () => {
+      visitRoom(roomId);
       setActiveRoom(roomId);
       setScreen('room');
       audioManager.playSfx('door');
@@ -92,20 +103,28 @@ export function Lobby() {
       ))}
 
       {/* Doors */}
-      {DOORS.map((door) => (
-        <group key={door.id}>
-          <InteractableObject
-            id={`door-${door.id}`}
-            position={door.position}
-            type="door"
-            onInteract={handleEnterRoom(door.id)}
-          />
-          <mesh position={[door.position[0], door.position[1] + 1.8, door.position[2]]}>
-            <planeGeometry args={[3, 0.5]} />
-            <meshBasicMaterial color="#FFD700" transparent opacity={0.15} />
-          </mesh>
-        </group>
-      ))}
+      {DOORS.map((door) => {
+        const effectiveLocked = door.id === 'career'
+          ? !isCareerUnlocked
+          : door.id === 'achievements'
+            ? !isAchievementUnlocked
+            : door.locked ?? false;
+        return (
+          <group key={door.id}>
+            <InteractableObject
+              id={`door-${door.id}`}
+              position={door.position}
+              type="door"
+              onInteract={handleEnterRoom(door.id, effectiveLocked) ?? (() => {})}
+              isLocked={effectiveLocked}
+            />
+            <mesh position={[door.position[0], door.position[1] + 1.8, door.position[2]]}>
+              <planeGeometry args={[3, 0.5]} />
+              <meshBasicMaterial color={effectiveLocked ? '#ff4444' : '#FFD700'} transparent opacity={0.15} />
+            </mesh>
+          </group>
+        );
+      })}
 
       {/* Center pedestal */}
       <mesh position={[0, 0.25, 0]}>

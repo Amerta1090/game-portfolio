@@ -31,7 +31,7 @@ class AudioManager {
     if (!this.initialized) this.init();
   }
 
-  playMusic(_type: 'title' | 'lobby' | 'identity' | 'skills' | 'projects'): void {
+  playMusic(_type: 'title' | 'lobby' | 'identity' | 'skills' | 'projects' | 'career' | 'achievements'): void {
     this.ensureInit();
     this.stopMusic();
     if (!this.ctx || !this.musicGain) return;

@@ -6,6 +6,9 @@ import { InfoPanel } from './InfoPanel';
 import { IdentityReconstruct } from '../minigames/IdentityReconstruct';
 import { SkillConstellation } from '../minigames/SkillConstellation';
 import { CodeDebug } from '../minigames/CodeDebug';
+import { TimelineOrder } from '../minigames/TimelineOrder';
+import { MemoryMatch } from '../minigames/MemoryMatch';
+import { gameData } from '../../data/loader';
 import { audioManager } from '../../utils/audio';
 export function DialogOverlay() {
   const dialogData = useInteractionStore((s) => s.dialogData);
@@ -85,6 +88,29 @@ export function DialogOverlay() {
               <CodeDebug
                 onComplete={() => handleMiniGameComplete('projects', 'projects')}
                 isCompleted={fragments.includes('projects')}
+              />
+            )}
+            {dialogData.type === 'minigame' && dialogData.gameId === 'timeline-order' && (
+              <TimelineOrder
+                experiences={gameData.experiences.map((e) => ({
+                  id: e.id,
+                  role: e.role,
+                  company: e.company,
+                  start_date: e.start_date,
+                }))}
+                onComplete={() => handleMiniGameComplete('career', 'career')}
+                isCompleted={fragments.includes('career')}
+              />
+            )}
+            {dialogData.type === 'minigame' && dialogData.gameId === 'memory-match' && (
+              <MemoryMatch
+                pairs={gameData.certifications.slice(0, 8).map((c, i) => ({
+                  id: `cert-${i}`,
+                  front: c.issuer,
+                  back: c.title.length > 30 ? c.title.slice(0, 28) + '…' : c.title,
+                }))}
+                onComplete={() => handleMiniGameComplete('achievements', 'achievements')}
+                isCompleted={fragments.includes('achievements')}
               />
             )}
           </motion.div>

@@ -1,13 +1,31 @@
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { useGameStore } from '../../game/stores/gameStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { audioManager } from '../../utils/audio';
+
+const LOCK_MESSAGES: Record<string, string> = {
+  'door-career': 'Complete 2 mini-games to unlock Career Hall',
+  'door-achievements': 'Visit 4 rooms to unlock Achievement Gallery',
+};
 
 export function InteractionPrompt() {
   const activeObject = useInteractionStore((s) => s.activeObject);
   const isInteracting = useInteractionStore((s) => s.isInteracting);
   const setInteracting = useInteractionStore((s) => s.setInteracting);
   const screen = useGameStore((s) => s.screen);
+  const [showLockMsg, setShowLockMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (activeObject?.isLocked && activeObject.id) {
+      const msg = LOCK_MESSAGES[activeObject.id] ?? 'Locked';
+      setShowLockMsg(msg);
+      const timer = setTimeout(() => setShowLockMsg(null), 2500);
+      return () => clearTimeout(timer);
+    }
+    setShowLockMsg(null);
+    return;
+  }, [activeObject?.id, activeObject?.isLocked]);
 
   useEffect(() => {
     function handleInteract(e: KeyboardEvent) {
@@ -24,7 +42,22 @@ export function InteractionPrompt() {
     return () => window.removeEventListener('keydown', handleInteract);
   }, [isInteracting, setInteracting]);
 
-  if (screen === 'title' || !activeObject || activeObject.isLocked || isInteracting) return null;
+  if (screen === 'title' || !activeObject || isInteracting) return null;
+
+  if (activeObject.isLocked && showLockMsg) {
+    return (
+      <motion.div
+        className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="bg-dark/80 border border-red-500/50 px-6 py-2 rounded font-mono text-xs text-red-400 text-center">
+          ⬡ {showLockMsg}
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
