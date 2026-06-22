@@ -16,9 +16,8 @@ export function TransitionOverlay() {
       const timer = setTimeout(() => setShow(false), 1200);
       return () => clearTimeout(timer);
     }
+    return;
   }, [screen, activeRoom]);
-
-  const transitioning = screen === 'room' || (screen === 'lobby' && !show);
 
   return (
     <AnimatePresence>

@@ -1,11 +1,11 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import { GameCanvas } from '../components/game/GameCanvas';
-import { HUD } from '../components/ui/HUD';
+import { GameShell } from '../components/game/GameShell';
 ---
 
 <BaseLayout>
   <GameCanvas client:only="react" />
-  <HUD client:only="react" />
+  <GameShell client:only="react" />
   <slot />
 </BaseLayout>

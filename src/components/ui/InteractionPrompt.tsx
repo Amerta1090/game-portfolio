@@ -24,7 +24,7 @@ export function InteractionPrompt() {
     return () => window.removeEventListener('keydown', handleInteract);
   }, [isInteracting, setInteracting]);
 
-  if (screen === 'title' || !activeObject || activeObject.isLocked) return null;
+  if (screen === 'title' || !activeObject || activeObject.isLocked || isInteracting) return null;
 
   return (
     <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none">

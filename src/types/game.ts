@@ -48,9 +48,16 @@ export interface InteractableObject {
 export interface InteractionState {
   activeObject: InteractableObject | null;
   isInteracting: boolean;
+  dialogData: DialogData;
   setActiveObject: (obj: InteractableObject | null) => void;
   setInteracting: (interacting: boolean) => void;
+  setDialogData: (data: DialogData) => void;
 }
+
+export type DialogData = 
+  | { type: 'info'; title: string; lines: string[]; animation: 'boot' | 'scroll' | 'glitch' }
+  | { type: 'minigame'; gameId: string }
+  | null;
 
 export type PerformanceTier = 'low' | 'medium' | 'high';
 

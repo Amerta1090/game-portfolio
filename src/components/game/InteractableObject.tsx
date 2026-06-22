@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Mesh, Vector3 } from 'three';
+import { Mesh, Vector3, MeshStandardMaterial } from 'three';
 import { usePlayerStore } from '../../game/stores/playerStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { INTERACTION_DISTANCE } from '../../game/constants';
@@ -49,7 +49,7 @@ export function InteractableObject({
     }
 
     if (meshRef.current) {
-      const mat = meshRef.current.material as THREE.MeshStandardMaterial;
+      const mat = meshRef.current.material as MeshStandardMaterial;
       mat.emissiveIntensity = nearby ? (isLocked ? 0.3 : 0.6) : 0;
     }
   });

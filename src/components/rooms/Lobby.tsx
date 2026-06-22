@@ -18,7 +18,8 @@ const DOORS: DoorConfig[] = [
   { id: 'achievements', position: [7.5, 1.25, -7.5], label: 'Achievement Gallery' },
 ];
 
-function Wall({ position, size, rotation }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
+function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
+  const rotation = rot ?? [0, 0, 0] as [number, number, number];
   return (
     <mesh position={position} rotation={rotation}>
       <planeGeometry args={size} />
@@ -43,9 +44,7 @@ function AmbientParticles() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <pointsMaterial size={0.08} color="#FFD700" transparent opacity={0.3} />

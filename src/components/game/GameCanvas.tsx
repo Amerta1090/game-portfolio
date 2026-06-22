@@ -3,9 +3,11 @@ import { useGameStore } from '../../game/stores/gameStore';
 import { Player } from './Player';
 import { CameraController } from './CameraController';
 import { Lobby } from '../rooms/Lobby';
+import { IdentityCore } from '../rooms/IdentityCore';
 import type { AABB } from '../../utils/collision';
 
 const LOBBY_BOUNDS: AABB = { minX: -11, maxX: 11, minZ: -11, maxZ: 11 };
+const ROOM_BOUNDS: AABB = { minX: -9, maxX: 9, minZ: -9, maxZ: 9 };
 
 function Scene() {
   const screen = useGameStore((s) => s.screen);
@@ -22,6 +24,16 @@ function Scene() {
   }
 
   if (screen === 'room') {
+    if (activeRoom === 'identity') {
+      return (
+        <>
+          <IdentityCore />
+          <Player bounds={ROOM_BOUNDS} />
+          <CameraController />
+        </>
+      );
+    }
+
     return (
       <>
         <ambientLight intensity={0.5} />
@@ -30,7 +42,7 @@ function Scene() {
           <planeGeometry args={[100, 100]} />
           <meshStandardMaterial color="#1A1A1A" />
         </mesh>
-        <Player bounds={LOBBY_BOUNDS} />
+        <Player bounds={ROOM_BOUNDS} />
         <CameraController />
       </>
     );

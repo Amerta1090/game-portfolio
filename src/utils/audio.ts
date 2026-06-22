@@ -1,4 +1,4 @@
-const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
 
 class AudioManager {
   private ctx: AudioContext | null = null;
@@ -10,7 +10,8 @@ class AudioManager {
 
   init(): void {
     if (this.initialized) return;
-    this.ctx = new AudioContext();
+    this.ctx = new AC();
+    if (!this.ctx) return;
     this.masterGain = this.ctx.createGain();
     this.masterGain.gain.value = 0.3;
     this.masterGain.connect(this.ctx.destination);
@@ -30,7 +31,7 @@ class AudioManager {
     if (!this.initialized) this.init();
   }
 
-  playMusic(type: 'title' | 'lobby' | 'identity' | 'skills' | 'projects'): void {
+  playMusic(_type: 'title' | 'lobby' | 'identity' | 'skills' | 'projects'): void {
     this.ensureInit();
     this.stopMusic();
     if (!this.ctx || !this.musicGain) return;
