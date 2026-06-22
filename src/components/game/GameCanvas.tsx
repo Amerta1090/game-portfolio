@@ -4,6 +4,8 @@ import { Player } from './Player';
 import { CameraController } from './CameraController';
 import { Lobby } from '../rooms/Lobby';
 import { IdentityCore } from '../rooms/IdentityCore';
+import { SkillChamber } from '../rooms/SkillChamber';
+import { ProjectLab } from '../rooms/ProjectLab';
 import type { AABB } from '../../utils/collision';
 
 const LOBBY_BOUNDS: AABB = { minX: -11, maxX: 11, minZ: -11, maxZ: 11 };
@@ -28,6 +30,26 @@ function Scene() {
       return (
         <>
           <IdentityCore />
+          <Player bounds={ROOM_BOUNDS} />
+          <CameraController />
+        </>
+      );
+    }
+
+    if (activeRoom === 'skills') {
+      return (
+        <>
+          <SkillChamber />
+          <Player bounds={ROOM_BOUNDS} />
+          <CameraController />
+        </>
+      );
+    }
+
+    if (activeRoom === 'projects') {
+      return (
+        <>
+          <ProjectLab />
           <Player bounds={ROOM_BOUNDS} />
           <CameraController />
         </>

@@ -4,6 +4,8 @@ import { useInteractionStore } from '../../game/stores/interactionStore';
 import { useProgressStore } from '../../game/stores/progressStore';
 import { InfoPanel } from './InfoPanel';
 import { IdentityReconstruct } from '../minigames/IdentityReconstruct';
+import { SkillConstellation } from '../minigames/SkillConstellation';
+import { CodeDebug } from '../minigames/CodeDebug';
 import { audioManager } from '../../utils/audio';
 export function DialogOverlay() {
   const dialogData = useInteractionStore((s) => s.dialogData);
@@ -26,10 +28,10 @@ export function DialogOverlay() {
     setDialogData(null);
   }
 
-  function handleMiniGameComplete() {
-    if (!fragments.includes('identity')) {
-      addFragment('identity');
-      completeRoom('identity');
+  function handleMiniGameComplete(room: string, fragmentId: string) {
+    if (!fragments.includes(fragmentId)) {
+      addFragment(fragmentId);
+      completeRoom(room as any);
       audioManager.playSfx('unlock');
     }
   }
@@ -69,8 +71,20 @@ export function DialogOverlay() {
                   'automation, and physical computing.',
                   'Emphasizes structured analysis, system-level thinking, and practical implementation.',
                 ]}
-                onComplete={handleMiniGameComplete}
+                onComplete={() => handleMiniGameComplete('identity', 'identity')}
                 isCompleted={fragments.includes('identity')}
+              />
+            )}
+            {dialogData.type === 'minigame' && dialogData.gameId === 'skill-constellation' && (
+              <SkillConstellation
+                onComplete={() => handleMiniGameComplete('skills', 'skills')}
+                isCompleted={fragments.includes('skills')}
+              />
+            )}
+            {dialogData.type === 'minigame' && dialogData.gameId === 'code-debug' && (
+              <CodeDebug
+                onComplete={() => handleMiniGameComplete('projects', 'projects')}
+                isCompleted={fragments.includes('projects')}
               />
             )}
           </motion.div>
