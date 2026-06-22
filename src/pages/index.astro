@@ -1,0 +1,8 @@
+---
+import GameLayout from '../layouts/GameLayout.astro';
+import { TitleScreen } from '../components/screens/TitleScreen';
+---
+
+<GameLayout>
+  <TitleScreen client:only="react" />
+</GameLayout>

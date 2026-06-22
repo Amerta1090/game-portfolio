@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { gameData } from '../data/loader';
+const { profile } = gameData;
+---
+
+<BaseLayout>
+  <main class="max-w-3xl mx-auto px-6 py-12">
+    <h1 class="text-neon font-game text-2xl mb-2">{profile.name}</h1>
+    <p class="text-gray-400 text-lg mb-1">{profile.headline}</p>
+    <p class="text-gray-500 text-sm mb-8">{profile.location}</p>
+
+    <section class="mb-8">
+      <h2 class="text-neon font-game text-sm mb-3">Summary</h2>
+      <p class="text-gray-300 leading-relaxed">{profile.summary}</p>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-neon font-game text-sm mb-3">Contact</h2>
+      <ul class="text-gray-400 text-sm space-y-1">
+        <li>Email: {profile.contact.email}</li>
+        <li>Phone: {profile.contact.phone}</li>
+        <li>LinkedIn: {profile.contact.linkedin}</li>
+        <li>GitHub: {profile.contact.github}</li>
+      </ul>
+    </section>
+
+    <a href="/" class="text-neon font-mono text-sm hover:underline">&larr; Back to game</a>
+  </main>
+</BaseLayout>

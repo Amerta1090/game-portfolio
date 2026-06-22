@@ -1,0 +1,11 @@
+name = "ridwan-exe"
+compatibility_date = "2026-06-22"
+pages_build_output_dir = "dist"
+
+[env.production]
+name = "ridwan-exe"
+
+[[redirects]]
+from = "/resume"
+to = "/resume/"
+status = 200
