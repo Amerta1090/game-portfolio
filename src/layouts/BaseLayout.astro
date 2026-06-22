@@ -11,6 +11,10 @@ import '../styles/global.css';
     <title>RIDWAN.EXE — Game Portfolio</title>
   </head>
   <body class="bg-dark text-white font-mono">
+    <div id="loading-screen" class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-dark">
+      <h1 class="text-neon text-5xl md:text-7xl font-game tracking-wider mb-8">RIDWAN.EXE</h1>
+      <p class="text-gray-400 font-mono text-sm">Loading...</p>
+    </div>
     <slot />
   </body>
 </html>

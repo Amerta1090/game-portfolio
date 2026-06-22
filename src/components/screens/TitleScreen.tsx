@@ -12,6 +12,7 @@ export function TitleScreen() {
   const load = useProgressStore((s) => s.load);
 
   useEffect(() => {
+    document.getElementById('loading-screen')?.remove();
     const timer = setTimeout(() => setShowStart(true), 1500);
     audioManager.init();
     audioManager.playMusic('title');
