@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 import { usePlayerStore } from '../../game/stores/playerStore';
+import { useGameStore } from '../../game/stores/gameStore';
 import { getMovementInput, computeMovement } from '../../game/systems/MovementSystem';
 import { useKeyboard } from '../../utils/keyboard';
 import type { AABB } from '../../utils/collision';
@@ -19,8 +20,10 @@ export function Player({ bounds = DEFAULT_BOUNDS }: PlayerProps) {
   const rotation = usePlayerStore((s) => s.rotation);
   const moveTo = usePlayerStore((s) => s.moveTo);
   const rotateTo = usePlayerStore((s) => s.rotateTo);
+  const isPaused = useGameStore((s) => s.isPaused);
 
   useFrame((_, delta) => {
+    if (isPaused) return;
     const input = getMovementInput();
     const result = computeMovement(input, rotation, Math.min(delta, 0.05), bounds, position.x, position.z);
 

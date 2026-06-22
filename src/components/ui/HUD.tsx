@@ -36,7 +36,7 @@ export function HUD() {
 
       <div className="absolute bottom-0 left-0 right-0 px-6 py-3 bg-dark/50 text-center">
         <span className="text-gray-500 font-mono text-xs">
-          WASD Move | E Interact
+          WASD Move | E Interact | ESC Pause
         </span>
       </div>
     </div>

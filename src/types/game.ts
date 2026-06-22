@@ -7,8 +7,11 @@ export type RoomId = 'identity' | 'skills' | 'projects' | 'career' | 'achievemen
 export interface GameState {
   screen: Screen;
   activeRoom: RoomId | null;
+  isPaused: boolean;
+  previousScreen: Screen;
   setScreen: (screen: Screen) => void;
   setActiveRoom: (room: RoomId | null) => void;
+  setPaused: (paused: boolean) => void;
 }
 
 export interface PlayerState {
@@ -27,6 +30,7 @@ export interface ProgressState {
   hasCompletedGame: boolean;
   addFragment: (id: string) => void;
   completeRoom: (id: RoomId) => void;
+  completeGame: () => void;
   visitRoom: (id: RoomId) => void;
   setMiniGameScore: (id: string, score: number) => void;
   save: () => void;

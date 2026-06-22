@@ -7,6 +7,7 @@ import { audioManager } from '../../utils/audio';
 const LOCK_MESSAGES: Record<string, string> = {
   'door-career': 'Complete 2 mini-games to unlock Career Hall',
   'door-achievements': 'Visit 4 rooms to unlock Achievement Gallery',
+  'door-hidden': 'Collect all 5 key fragments to reveal the hidden room',
 };
 
 export function InteractionPrompt() {
@@ -14,6 +15,7 @@ export function InteractionPrompt() {
   const isInteracting = useInteractionStore((s) => s.isInteracting);
   const setInteracting = useInteractionStore((s) => s.setInteracting);
   const screen = useGameStore((s) => s.screen);
+  const isPaused = useGameStore((s) => s.isPaused);
   const [showLockMsg, setShowLockMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export function InteractionPrompt() {
   useEffect(() => {
     function handleInteract(e: KeyboardEvent) {
       if (e.key === 'e' || e.key === 'E') {
+        if (useGameStore.getState().isPaused) return;
         const obj = useInteractionStore.getState().activeObject;
         if (obj && !obj.isLocked && !isInteracting) {
           setInteracting(true);
@@ -42,7 +45,7 @@ export function InteractionPrompt() {
     return () => window.removeEventListener('keydown', handleInteract);
   }, [isInteracting, setInteracting]);
 
-  if (screen === 'title' || !activeObject || isInteracting) return null;
+  if (screen === 'title' || isPaused || !activeObject || isInteracting) return null;
 
   if (activeObject.isLocked && showLockMsg) {
     return (

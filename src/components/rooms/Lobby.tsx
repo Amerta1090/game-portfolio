@@ -19,6 +19,7 @@ const DOORS: DoorConfig[] = [
   { id: 'projects', position: [0, 1.25, 11], label: 'Project Lab' },
   { id: 'career', position: [-11, 1.25, 0], label: 'Career Hall', locked: true, lockReason: 'Complete 2 mini-games to unlock' },
   { id: 'achievements', position: [7.5, 1.25, -7.5], label: 'Achievement Gallery', locked: true, lockReason: 'Visit 4 rooms to unlock' },
+  { id: 'hidden', position: [-7.5, 1.25, -7.5], label: '???', locked: true, lockReason: 'Collect all 5 key fragments to reveal the hidden room' },
 ];
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
@@ -64,6 +65,7 @@ export function Lobby() {
 
   const isCareerUnlocked = fragments.length >= 2;
   const isAchievementUnlocked = visitedRooms.length >= 4;
+  const isHiddenUnlocked = fragments.length >= 5;
 
   function handleEnterRoom(roomId: RoomId, isLocked: boolean) {
     if (isLocked) return;
@@ -108,7 +110,9 @@ export function Lobby() {
           ? !isCareerUnlocked
           : door.id === 'achievements'
             ? !isAchievementUnlocked
-            : door.locked ?? false;
+            : door.id === 'hidden'
+              ? !isHiddenUnlocked
+              : door.locked ?? false;
         return (
           <group key={door.id}>
             <InteractableObject

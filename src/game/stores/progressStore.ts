@@ -60,6 +60,11 @@ export const useProgressStore = create<ProgressState>((set, get) => {
       persistSaveData(get());
     },
 
+    completeGame: () => {
+      set({ hasCompletedGame: true, unlockedSecretRoom: true });
+      persistSaveData(get());
+    },
+
     visitRoom: (id: RoomId) => {
       set((state) => {
         if (state.visitedRooms.includes(id)) return state;
