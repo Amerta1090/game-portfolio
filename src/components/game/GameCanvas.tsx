@@ -117,7 +117,7 @@ export function GameCanvas() {
   return (
     <div className="fixed inset-0">
       <Canvas
-        camera={{ position: [0, 2, 5], fov: 60 }}
+        camera={{ position: [0, 3.5, -5], fov: 60 }}
         gl={{ antialias: qualitySettings.antialias, powerPreference: 'high-performance' }}
         dpr={qualitySettings.antialias ? [1, 2] : [1, 1]}
       >
