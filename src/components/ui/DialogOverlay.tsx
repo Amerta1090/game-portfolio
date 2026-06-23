@@ -48,6 +48,9 @@ export function DialogOverlay() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={handleClose}
+          role="dialog"
+          aria-modal="true"
+          aria-label={dialogData.type === 'info' ? dialogData.title : 'Mini-game'}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}

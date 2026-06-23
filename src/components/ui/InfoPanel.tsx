@@ -13,6 +13,8 @@ function TypewriterText({ text }: { text: string }) {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    setDisplayed('');
+    setDone(false);
     let i = 0;
     const timer = setInterval(() => {
       i++;

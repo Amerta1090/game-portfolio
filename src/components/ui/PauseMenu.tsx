@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useProgressStore } from '../../game/stores/progressStore';
@@ -14,6 +14,7 @@ export function PauseMenu() {
   const hasCompletedGame = useProgressStore((s) => s.hasCompletedGame);
   const dialogData = useInteractionStore((s) => s.dialogData);
   const [showCredits, setShowCredits] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleEsc(e: KeyboardEvent) {
@@ -29,6 +30,27 @@ export function PauseMenu() {
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
   }, [setPaused, showCredits, dialogData]);
+
+  useEffect(() => {
+    if (!isPaused || !menuRef.current) return;
+    const buttons = menuRef.current.querySelectorAll('button');
+    const first = buttons[0] as HTMLButtonElement | undefined;
+    const last = buttons[buttons.length - 1] as HTMLButtonElement | undefined;
+    first?.focus();
+
+    function handleTab(e: KeyboardEvent) {
+      if (e.key !== 'Tab' || !first || !last) return;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+    window.addEventListener('keydown', handleTab);
+    return () => window.removeEventListener('keydown', handleTab);
+  }, [isPaused]);
 
   function handleResume() {
     setPaused(false);
@@ -65,8 +87,12 @@ export function PauseMenu() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Pause menu"
         >
           <motion.div
+            ref={menuRef}
             className="bg-dark/95 border border-neon/30 rounded-lg overflow-hidden w-72"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}

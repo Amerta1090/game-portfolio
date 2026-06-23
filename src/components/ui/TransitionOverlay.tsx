@@ -29,6 +29,7 @@ export function TransitionOverlay() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
+          aria-hidden="true"
         >
           <motion.p
             className="text-neon font-game text-2xl tracking-wider"

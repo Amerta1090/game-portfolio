@@ -68,7 +68,7 @@ export function Lobby() {
   const isHiddenUnlocked = fragments.length >= 5;
 
   function handleEnterRoom(roomId: RoomId, isLocked: boolean) {
-    if (isLocked) return;
+    if (isLocked) return () => {};
     return () => {
       visitRoom(roomId);
       setActiveRoom(roomId);
@@ -119,7 +119,7 @@ export function Lobby() {
               id={`door-${door.id}`}
               position={door.position}
               type="door"
-              onInteract={handleEnterRoom(door.id, effectiveLocked) ?? (() => {})}
+              onInteract={handleEnterRoom(door.id, effectiveLocked)}
               isLocked={effectiveLocked}
             />
             <mesh position={[door.position[0], door.position[1] + 1.8, door.position[2]]}>

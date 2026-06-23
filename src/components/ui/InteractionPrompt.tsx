@@ -54,6 +54,8 @@ export function InteractionPrompt() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0 }}
+        role="alert"
+        aria-live="assertive"
       >
         <div className="bg-dark/80 border border-red-500/50 px-6 py-2 rounded font-mono text-xs text-red-400 text-center">
           ⬡ {showLockMsg}
@@ -63,9 +65,9 @@ export function InteractionPrompt() {
   }
 
   return (
-    <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+    <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none" role="status" aria-live="polite">
       <div className="bg-dark/80 border border-neon/50 px-6 py-2 rounded font-mono text-sm text-neon flex items-center gap-3">
-        <span className="text-white bg-neon/20 px-2 py-0.5 rounded text-xs font-bold">E</span>
+        <span className="text-white bg-neon/20 px-2 py-0.5 rounded text-xs font-bold" aria-hidden="true">E</span>
         <span>Interact</span>
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
+import { Mesh } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
@@ -55,7 +56,7 @@ function AmbientParticles() {
 }
 
 function Pedestal() {
-  const ref = useMemo(() => ({ current: null as any }), []);
+  const ref = useRef<Mesh>(null);
 
   useFrame(({ clock }) => {
     if (ref.current) {

@@ -25,17 +25,17 @@ export function HUD() {
   if (screen === 'title') return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-40">
-      <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3 bg-dark/80" role="status" aria-live="polite">
+    <div className="fixed inset-0 pointer-events-none z-40" role="status" aria-label="Game HUD">
+      <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3 bg-dark/80">
         <span className="text-neon font-game text-xs tracking-wider">RIDWAN.EXE</span>
-        <span className="text-white font-mono text-sm">
+        <span className="text-white font-mono text-sm" aria-label={`Current room: ${activeRoom ? ROOM_NAMES[activeRoom] ?? activeRoom : 'Lobby'}`}>
           {activeRoom ? ROOM_NAMES[activeRoom] ?? activeRoom : 'Lobby'}
         </span>
         <FragmentDisplay />
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 px-6 py-3 bg-dark/50 text-center">
-        <span className="text-gray-500 font-mono text-xs">
+        <span className="text-gray-500 font-mono text-xs" aria-label="Controls: WASD to move, E to interact, ESC to pause">
           WASD Move | E Interact | ESC Pause
         </span>
       </div>

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh, Vector3, MeshStandardMaterial } from 'three';
 import { usePlayerStore } from '../../game/stores/playerStore';
@@ -26,7 +26,7 @@ export function InteractableObject({
   const meshRef = useRef<Mesh>(null);
   const playerPos = usePlayerStore((s) => s.position);
   const setActiveObject = useInteractionStore((s) => s.setActiveObject);
-  const objPos = new Vector3(position[0], position[1], position[2]);
+  const objPos = useMemo(() => new Vector3(position[0], position[1], position[2]), [position[0], position[1], position[2]]);
 
   useFrame(() => {
     const dist = playerPos.distanceTo(objPos);

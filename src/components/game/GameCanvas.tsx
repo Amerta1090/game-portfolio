@@ -9,6 +9,7 @@ import { ProjectLab } from '../rooms/ProjectLab';
 import { CareerHall } from '../rooms/CareerHall';
 import { AchievementGallery } from '../rooms/AchievementGallery';
 import { HiddenRoom } from '../rooms/HiddenRoom';
+import { qualitySettings } from '../../utils/performance';
 import type { AABB } from '../../utils/collision';
 
 const LOBBY_BOUNDS: AABB = { minX: -11, maxX: 11, minZ: -11, maxZ: 11 };
@@ -117,7 +118,8 @@ export function GameCanvas() {
     <div className="fixed inset-0">
       <Canvas
         camera={{ position: [0, 2, 5], fov: 60 }}
-        gl={{ antialias: true }}
+        gl={{ antialias: qualitySettings.antialias, powerPreference: 'high-performance' }}
+        dpr={qualitySettings.antialias ? [1, 2] : [1, 1]}
       >
         <Scene />
       </Canvas>

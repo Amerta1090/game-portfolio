@@ -47,8 +47,10 @@ export function TitleScreen() {
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-dark cursor-pointer"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
+          role="main"
+          aria-label="RIDWAN.EXE title screen"
         >
-          <div className="pointer-events-none fixed inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.15)_2px,rgba(0,0,0,0.15)_4px)]" />
+          <div className="pointer-events-none fixed inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.15)_2px,rgba(0,0,0,0.15)_4px)]" aria-hidden="true" />
 
           <motion.h1
             className="text-neon text-5xl md:text-7xl font-game tracking-wider mb-8"
@@ -75,6 +77,7 @@ export function TitleScreen() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
+                aria-live="polite"
               >
                 Press ENTER to start
               </motion.p>
@@ -88,6 +91,7 @@ export function TitleScreen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
+              aria-label="Continue from saved game"
             >
               [ Continue ]
             </motion.button>
