@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useProgressStore } from '../../game/stores/progressStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { DoorFrame } from '../game/DoorFrame';
+import { TexturedWall, TexturedFloor } from '../game/TexturedWall';
 import type { RoomId } from '../../types/game';
 import { audioManager } from '../../utils/audio';
 
@@ -24,12 +26,7 @@ const DOORS: DoorConfig[] = [
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
   const rotation = rot ?? [0, 0, 0] as [number, number, number];
-  return (
-    <mesh position={position} rotation={rotation}>
-      <planeGeometry args={size} />
-      <meshStandardMaterial color="#2A2A2A" />
-    </mesh>
-  );
+  return <TexturedWall position={position} size={size} rotation={rotation} />;
 }
 
 function AmbientParticles() {
@@ -51,7 +48,7 @@ function AmbientParticles() {
           args={[positions, 3]}
         />
       </bufferGeometry>
-      <pointsMaterial size={0.08} color="#FFD700" transparent opacity={0.3} />
+      <pointsMaterial size={0.08} color="#FFD700" transparent opacity={0.25} />
     </points>
   );
 }
@@ -83,10 +80,7 @@ export function Lobby() {
       <directionalLight position={[10, 15, 5]} intensity={0.6} color="#FFD700" />
       <pointLight position={[0, 6, 0]} intensity={0.3} color="#FFD700" />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[24, 24]} />
-        <meshStandardMaterial color="#1A1A1A" />
-      </mesh>
+      <TexturedFloor args={[24, 24]} />
 
       {/* Walls */}
       <Wall position={[0, 3, -12]} size={[24, 6]} />
@@ -113,8 +107,22 @@ export function Lobby() {
             : door.id === 'hidden'
               ? !isHiddenUnlocked
               : door.locked ?? false;
+
+        const doorRotation: [number, number, number] = door.position[0] === 11
+          ? [0, -Math.PI / 2, 0]
+          : door.position[0] === -11
+            ? [0, Math.PI / 2, 0]
+            : door.position[2] === 11
+              ? [0, Math.PI, 0]
+              : [0, 0, 0];
+
         return (
           <group key={door.id}>
+            <DoorFrame
+              position={door.position}
+              rotation={doorRotation}
+              isLocked={effectiveLocked}
+            />
             <InteractableObject
               id={`door-${door.id}`}
               position={door.position}
@@ -122,10 +130,6 @@ export function Lobby() {
               onInteract={handleEnterRoom(door.id, effectiveLocked)}
               isLocked={effectiveLocked}
             />
-            <mesh position={[door.position[0], door.position[1] + 1.8, door.position[2]]}>
-              <planeGeometry args={[3, 0.5]} />
-              <meshBasicMaterial color={effectiveLocked ? '#ff4444' : '#FFD700'} transparent opacity={0.15} />
-            </mesh>
           </group>
         );
       })}

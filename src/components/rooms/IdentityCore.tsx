@@ -4,6 +4,8 @@ import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { TerminalScreen } from '../game/TerminalScreen';
+import { TexturedWall, TexturedFloor } from '../game/TexturedWall';
 import { audioManager } from '../../utils/audio';
 import { gameData } from '../../data/loader';
 
@@ -23,12 +25,7 @@ const INFO_TERMINALS: TerminalConfig[] = [
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
   const rotation = rot ?? [0, 0, 0] as [number, number, number];
-  return (
-    <mesh position={position} rotation={rotation}>
-      <planeGeometry args={size} />
-      <meshStandardMaterial color="#2A2A2A" />
-    </mesh>
-  );
+  return <TexturedWall position={position} size={size} rotation={rotation} />;
 }
 
 function AmbientParticles() {
@@ -149,10 +146,7 @@ export function IdentityCore() {
       <pointLight position={[-5, 3, -5]} intensity={0.3} color="#FFD700" distance={8} />
       <pointLight position={[5, 3, -5]} intensity={0.3} color="#FFD700" distance={8} />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#1A1A1A" />
-      </mesh>
+      <TexturedFloor args={[20, 20]} />
 
       {/* Walls */}
       <Wall position={[0, 3, -10]} size={[20, 6]} />
@@ -181,8 +175,13 @@ export function IdentityCore() {
           {/* Terminal screen glow */}
           <mesh position={[terminal.position[0], terminal.position[1] + 0.3, terminal.position[2] + 0.41]}>
             <planeGeometry args={[0.6, 0.4]} />
-            <meshBasicMaterial color="#FFD700" transparent opacity={0.15} />
+            <meshBasicMaterial color="#FFD700" transparent opacity={0.08} />
           </mesh>
+          <TerminalScreen
+            position={[terminal.position[0], terminal.position[1] + 0.3, terminal.position[2] + 0.42]}
+            width={0.55}
+            height={0.35}
+          />
           <InteractableObject
             id={terminal.id}
             position={terminal.position}
@@ -203,12 +202,17 @@ export function IdentityCore() {
         </mesh>
         <mesh position={[-5, 1.8, 5.41]}>
           <planeGeometry args={[0.7, 0.5]} />
-          <meshBasicMaterial color="#FFD700" transparent opacity={0.2} />
+          <meshBasicMaterial color="#FFD700" transparent opacity={0.08} />
         </mesh>
         <mesh position={[-5, 1.25, 5]}>
           <boxGeometry args={[0.5, 0.1, 0.1]} />
           <meshBasicMaterial color="#FFD700" transparent opacity={0.4} />
         </mesh>
+        <TerminalScreen
+          position={[-5, 1.8, 5.42]}
+          width={0.65}
+          height={0.45}
+        />
         <InteractableObject
           id="terminal-minigame"
           position={[-5, 1.25, 5]}

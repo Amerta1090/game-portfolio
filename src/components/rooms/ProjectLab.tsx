@@ -2,6 +2,8 @@ import { useMemo, useEffect } from 'react';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { TerminalScreen } from '../game/TerminalScreen';
+import { TexturedWall, TexturedFloor } from '../game/TexturedWall';
 import { audioManager } from '../../utils/audio';
 import { gameData } from '../../data/loader';
 
@@ -11,12 +13,7 @@ const NON_FEATURED_COUNT = Math.min(2, projects.projects.filter((p) => !p.featur
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
   const rotation = rot ?? [0, 0, 0] as [number, number, number];
-  return (
-    <mesh position={position} rotation={rotation}>
-      <planeGeometry args={size} />
-      <meshStandardMaterial color="#2A2A2A" />
-    </mesh>
-  );
+  return <TexturedWall position={position} size={size} rotation={rotation} />;
 }
 
 function MonitorScreen({ color = '#00ff88' }: { color?: string }) {
@@ -113,10 +110,7 @@ export function ProjectLab() {
       <pointLight position={[-6, 3, -4]} intensity={0.3} color="#00ff88" distance={8} />
       <pointLight position={[6, 3, -4]} intensity={0.3} color="#00ff88" distance={8} />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[24, 24]} />
-        <meshStandardMaterial color="#1A1A1A" />
-      </mesh>
+      <TexturedFloor args={[24, 24]} />
 
       <Wall position={[0, 3, -12]} size={[24, 6]} />
       <Wall position={[12, 3, 0]} size={[24, 6]} rotation={[0, Math.PI / 2, 0]} />
@@ -155,6 +149,11 @@ export function ProjectLab() {
             <mesh position={[pos[0], pos[1] + 0.4, pos[2] + 0.03]}>
               <MonitorScreen color={project.category === 'ml' ? '#9B59B6' : '#00ff88'} />
             </mesh>
+            <TerminalScreen
+              position={[pos[0], pos[1] + 0.4, pos[2] + 0.06]}
+              width={0.55}
+              height={0.35}
+            />
             <InteractableObject
               id={`project-station-${i}`}
               position={pos}
@@ -201,8 +200,13 @@ export function ProjectLab() {
         </mesh>
         <mesh position={[0, 0.9, 0.41]}>
           <planeGeometry args={[1.0, 0.6]} />
-          <meshBasicMaterial color="#FFD700" transparent opacity={0.15} />
+          <meshBasicMaterial color="#FFD700" transparent opacity={0.08} />
         </mesh>
+        <TerminalScreen
+          position={[0, 0.9, 0.43]}
+          width={0.95}
+          height={0.55}
+        />
         <InteractableObject
           id="console-debug"
           position={[0, 1.25, 0]}

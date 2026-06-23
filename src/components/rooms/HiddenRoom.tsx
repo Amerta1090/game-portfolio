@@ -1,9 +1,12 @@
 import { useState, useMemo, useEffect } from 'react';
+import { CanvasTexture } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { useProgressStore } from '../../game/stores/progressStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { TerminalScreen } from '../game/TerminalScreen';
+import { createGridTexture } from '../../utils/textures';
 import { audioManager } from '../../utils/audio';
 import { gameData } from '../../data/loader';
 
@@ -176,25 +179,35 @@ export function HiddenRoom() {
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[14, 14]} />
-        <meshStandardMaterial color="#1A1A1A" />
+        <meshStandardMaterial
+          map={new CanvasTexture(createGridTexture('#FFD700', '#1A1A1A', 64, 0.08))}
+        />
       </mesh>
 
       {/* Walls */}
       <mesh position={[0, 3, -7]}>
         <planeGeometry args={[14, 6]} />
-        <meshStandardMaterial color="#2A2A2A" />
+        <meshStandardMaterial
+          map={new CanvasTexture(createGridTexture('#FFD700', '#2A2A2A', 64, 0.04))}
+        />
       </mesh>
       <mesh position={[7, 3, 0]} rotation={[0, Math.PI / 2, 0]}>
         <planeGeometry args={[14, 6]} />
-        <meshStandardMaterial color="#2A2A2A" />
+        <meshStandardMaterial
+          map={new CanvasTexture(createGridTexture('#FFD700', '#2A2A2A', 64, 0.04))}
+        />
       </mesh>
       <mesh position={[0, 3, 7]}>
         <planeGeometry args={[14, 6]} />
-        <meshStandardMaterial color="#2A2A2A" />
+        <meshStandardMaterial
+          map={new CanvasTexture(createGridTexture('#FFD700', '#2A2A2A', 64, 0.04))}
+        />
       </mesh>
       <mesh position={[-7, 3, 0]} rotation={[0, Math.PI / 2, 0]}>
         <planeGeometry args={[14, 6]} />
-        <meshStandardMaterial color="#2A2A2A" />
+        <meshStandardMaterial
+          map={new CanvasTexture(createGridTexture('#FFD700', '#2A2A2A', 64, 0.04))}
+        />
       </mesh>
 
       {/* Yellow trim */}
@@ -244,8 +257,13 @@ export function HiddenRoom() {
         </mesh>
         <mesh position={[0, 1.25, 0.41]}>
           <planeGeometry args={[0.5, 0.35]} />
-          <meshBasicMaterial color="#FFD700" transparent opacity={terminalActivated ? 0.3 : 0.1} />
+          <meshBasicMaterial color="#FFD700" transparent opacity={terminalActivated ? 0.3 : 0.08} />
         </mesh>
+        <TerminalScreen
+          position={[0, 1.25, 0.43]}
+          width={0.45}
+          height={0.3}
+        />
         <InteractableObject
           id="terminal-final"
           position={[0, 1.25, 0]}

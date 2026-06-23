@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import { FragmentBurst } from '../ui/FragmentBurst';
 
 interface BugChallenge {
   code: string[];
@@ -101,23 +102,11 @@ export function CodeDebug({ onComplete, isCompleted }: CodeDebugProps) {
 
   if (isCompleted || showSuccess) {
     return (
-      <motion.div
-        className="bg-dark/95 border border-neon/50 rounded-lg p-8 max-w-lg w-full mx-4 text-center"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
-          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-          className="text-6xl mb-4"
-        >
-          ⬡
-        </motion.div>
-        <h2 className="text-neon font-game text-sm mb-3">BUILD SUCCESSFUL</h2>
-        <p className="text-gray-400 font-mono text-xs">System debug complete. All checks passed.</p>
-        <p className="text-neon font-mono text-xs mt-4">Key Fragment #3 acquired</p>
-      </motion.div>
+      <FragmentBurst
+        label="BUILD SUCCESSFUL"
+        subtitle="System debug complete. All checks passed."
+        fragmentNumber={3}
+      />
     );
   }
 

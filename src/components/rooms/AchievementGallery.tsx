@@ -2,6 +2,8 @@ import { useMemo, useEffect } from 'react';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { TerminalScreen } from '../game/TerminalScreen';
+import { TexturedWall, TexturedFloor } from '../game/TexturedWall';
 import { audioManager } from '../../utils/audio';
 import { gameData } from '../../data/loader';
 
@@ -10,12 +12,7 @@ const honors = gameData.honors;
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
   const rotation = rot ?? [0, 0, 0] as [number, number, number];
-  return (
-    <mesh position={position} rotation={rotation}>
-      <planeGeometry args={size} />
-      <meshStandardMaterial color="#2A2A2A" />
-    </mesh>
-  );
+  return <TexturedWall position={position} size={size} rotation={rotation} />;
 }
 
 function AmbientParticles() {
@@ -132,10 +129,7 @@ export function AchievementGallery() {
       <pointLight position={[-6, 3, -6]} intensity={0.3} color="#FFD700" distance={10} />
       <pointLight position={[6, 3, -6]} intensity={0.3} color="#FFD700" distance={10} />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[24, 24]} />
-        <meshStandardMaterial color="#1A1A1A" />
-      </mesh>
+      <TexturedFloor args={[24, 24]} />
 
       <Wall position={[0, 3, -12]} size={[24, 6]} />
       <Wall position={[12, 3, 0]} size={[24, 6]} rotation={[0, Math.PI / 2, 0]} />
@@ -209,8 +203,13 @@ export function AchievementGallery() {
         </mesh>
         <mesh position={[-5, 1.8, -4.59]}>
           <planeGeometry args={[0.7, 0.5]} />
-          <meshBasicMaterial color="#FFD700" transparent opacity={0.2} />
+          <meshBasicMaterial color="#FFD700" transparent opacity={0.08} />
         </mesh>
+        <TerminalScreen
+          position={[-5, 1.8, -4.58]}
+          width={0.65}
+          height={0.45}
+        />
         <InteractableObject
           id="terminal-memory"
           position={[-5, 1.25, -5]}

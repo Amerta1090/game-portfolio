@@ -59,12 +59,30 @@ export function TitleScreen() {
           <div className="pointer-events-none fixed inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.15)_2px,rgba(0,0,0,0.15)_4px)]" aria-hidden="true" />
 
           <motion.h1
-            className="text-neon text-5xl md:text-7xl font-game tracking-wider mb-8"
+            className="text-neon text-5xl md:text-7xl font-game tracking-wider mb-8 relative"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, ease: 'easeOut' }}
+            style={{ textShadow: '2px 2px 0px rgba(255,215,0,0.3), -1px -1px 0px rgba(255,100,0,0.15)' }}
           >
-            RIDWAN.EXE
+            <span className="relative inline-block">
+              RIDWAN.EXE
+              {/* Glitch ghost layers */}
+              <span
+                className="absolute inset-0 text-orange-500/30 animate-glitch pointer-events-none"
+                style={{ clipPath: 'inset(20% 0 30% 0)', transform: 'translateX(-2px)' }}
+                aria-hidden="true"
+              >
+                RIDWAN.EXE
+              </span>
+              <span
+                className="absolute inset-0 text-yellow-300/20 animate-glitch pointer-events-none"
+                style={{ clipPath: 'inset(50% 0 10% 0)', transform: 'translateX(2px)', animationDelay: '0.1s' }}
+                aria-hidden="true"
+              >
+                RIDWAN.EXE
+              </span>
+            </span>
           </motion.h1>
 
           <motion.p

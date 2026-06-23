@@ -2,6 +2,8 @@ import { useMemo, useEffect } from 'react';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { TerminalScreen } from '../game/TerminalScreen';
+import { TexturedWall, TexturedFloor } from '../game/TexturedWall';
 import { audioManager } from '../../utils/audio';
 import { gameData } from '../../data/loader';
 
@@ -17,16 +19,6 @@ const CATEGORY_POSITIONS: [number, number, number][] = [
   [-5, 1.25, 6],
   [0, 1.25, -6],
 ];
-
-function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
-  const rotation = rot ?? [0, 0, 0] as [number, number, number];
-  return (
-    <mesh position={position} rotation={rotation}>
-      <planeGeometry args={size} />
-      <meshStandardMaterial color="#1A1A2E" />
-    </mesh>
-  );
-}
 
 function ConstellationLines() {
   const positions = useMemo(() => {
@@ -126,15 +118,12 @@ export function SkillChamber() {
       <pointLight position={[-6, 3, -5]} intensity={0.4} color="#9B59B6" distance={10} />
       <pointLight position={[6, 3, 5]} intensity={0.4} color="#9B59B6" distance={10} />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[24, 24]} />
-        <meshStandardMaterial color="#0D0D1A" />
-      </mesh>
+      <TexturedFloor args={[24, 24]} color="#9B59B6" />
 
-      <Wall position={[0, 3, -12]} size={[24, 6]} />
-      <Wall position={[12, 3, 0]} size={[24, 6]} rotation={[0, Math.PI / 2, 0]} />
-      <Wall position={[0, 3, 12]} size={[24, 6]} />
-      <Wall position={[-12, 3, 0]} size={[24, 6]} rotation={[0, Math.PI / 2, 0]} />
+      <TexturedWall position={[0, 3, -12]} size={[24, 6]} gridColor="#9B59B6" baseColor="#0D0D1A" />
+      <TexturedWall position={[12, 3, 0]} size={[24, 6]} rotation={[0, Math.PI / 2, 0]} gridColor="#9B59B6" baseColor="#0D0D1A" />
+      <TexturedWall position={[0, 3, 12]} size={[24, 6]} gridColor="#9B59B6" baseColor="#0D0D1A" />
+      <TexturedWall position={[-12, 3, 0]} size={[24, 6]} rotation={[0, Math.PI / 2, 0]} gridColor="#9B59B6" baseColor="#0D0D1A" />
 
       {[[0, 6, -12, 24, 0.1, 0.1], [12, 6, 0, 0.1, 0.1, 24], [0, 6, 12, 24, 0.1, 0.1], [-12, 6, 0, 0.1, 0.1, 24],
         [0, 0, -12, 24, 0.1, 0.1], [12, 0, 0, 0.1, 0.1, 24], [0, 0, 12, 24, 0.1, 0.1], [-12, 0, 0, 0.1, 0.1, 24]
@@ -177,8 +166,13 @@ export function SkillChamber() {
         </mesh>
         <mesh position={[-5, 1.8, 6.41]}>
           <planeGeometry args={[0.7, 0.5]} />
-          <meshBasicMaterial color="#9B59B6" transparent opacity={0.2} />
+          <meshBasicMaterial color="#9B59B6" transparent opacity={0.08} />
         </mesh>
+        <TerminalScreen
+          position={[-5, 1.8, 6.42]}
+          width={0.65}
+          height={0.45}
+        />
         <InteractableObject
           id="terminal-constellation"
           position={[-5, 1.25, 6]}

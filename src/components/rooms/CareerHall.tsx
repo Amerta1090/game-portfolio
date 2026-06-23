@@ -2,6 +2,8 @@ import { useMemo, useEffect } from 'react';
 import { useGameStore } from '../../game/stores/gameStore';
 import { useInteractionStore } from '../../game/stores/interactionStore';
 import { InteractableObject } from '../game/InteractableObject';
+import { TerminalScreen } from '../game/TerminalScreen';
+import { TexturedWall, TexturedFloor } from '../game/TexturedWall';
 import { audioManager } from '../../utils/audio';
 import { gameData } from '../../data/loader';
 
@@ -12,12 +14,7 @@ const ROOM_LENGTH = 36;
 
 function Wall({ position, size, rotation: rot }: { position: [number, number, number]; size: [number, number]; rotation?: [number, number, number] }) {
   const rotation = rot ?? [0, 0, 0] as [number, number, number];
-  return (
-    <mesh position={position} rotation={rotation}>
-      <planeGeometry args={size} />
-      <meshStandardMaterial color="#2A2A2A" />
-    </mesh>
-  );
+  return <TexturedWall position={position} size={size} rotation={rotation} />;
 }
 
 function AmbientParticles() {
@@ -137,10 +134,7 @@ export function CareerHall() {
       <pointLight position={[-4, 3, 0]} intensity={0.3} color="#FFD700" distance={18} />
       <pointLight position={[4, 3, 0]} intensity={0.3} color="#FFD700" distance={18} />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[14, ROOM_LENGTH]} />
-        <meshStandardMaterial color="#1A1A1A" />
-      </mesh>
+      <TexturedFloor args={[14, ROOM_LENGTH]} />
 
       <Wall position={[0, 3, -ROOM_LENGTH / 2]} size={[14, 6]} />
       <Wall position={[7, 3, 0]} size={[ROOM_LENGTH, 6]} rotation={[0, Math.PI / 2, 0]} />
@@ -229,8 +223,13 @@ export function CareerHall() {
         </mesh>
         <mesh position={[0, 1.8, ROOM_LENGTH / 2 - 2.59]}>
           <planeGeometry args={[0.7, 0.5]} />
-          <meshBasicMaterial color="#FFD700" transparent opacity={0.2} />
+          <meshBasicMaterial color="#FFD700" transparent opacity={0.08} />
         </mesh>
+        <TerminalScreen
+          position={[0, 1.8, ROOM_LENGTH / 2 - 2.58]}
+          width={0.65}
+          height={0.45}
+        />
         <InteractableObject
           id="terminal-timeline"
           position={[0, 1.25, ROOM_LENGTH / 2 - 3]}

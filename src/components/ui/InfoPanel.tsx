@@ -51,7 +51,12 @@ function GlitchText({ text }: { text: string }) {
 
 export function InfoPanel({ title, lines, animation, onClose }: InfoPanelProps) {
   return (
-    <div className="bg-dark/95 border border-neon/30 rounded-lg p-6 max-w-lg w-full mx-4 max-h-[70vh] overflow-y-auto">
+    <div className="bg-dark/95 border-2 border-neon/40 rounded p-6 max-w-lg w-full mx-4 max-h-[70vh] overflow-y-auto shadow-[0_0_30px_rgba(255,215,0,0.08)] relative">
+      {/* Double border effect via outline */}
+      <div className="absolute inset-1 border border-neon/20 rounded pointer-events-none" />
+      {/* Scanline overlay inside panel */}
+      <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.08)_2px,rgba(0,0,0,0.08)_4px)] pointer-events-none rounded" />
+      <div className="relative z-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-neon animate-blink" />
@@ -123,6 +128,7 @@ export function InfoPanel({ title, lines, animation, onClose }: InfoPanelProps) 
       >
         [ Close ]
       </motion.button>
+      </div>
     </div>
   );
 }

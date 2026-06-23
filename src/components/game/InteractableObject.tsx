@@ -58,12 +58,12 @@ export function InteractableObject({
     <mesh
       ref={meshRef}
       position={position}
+      visible={false}
     >
       <boxGeometry args={[1.5, 2.5, 0.3]} />
       <meshStandardMaterial
-        color={type === 'door' ? (isLocked ? '#555555' : '#FFD700') : '#444444'}
-        emissive={type === 'door' ? (isLocked ? '#ff4444' : '#FFD700') : '#444444'}
-        emissiveIntensity={0}
+        transparent
+        opacity={0}
       />
     </mesh>
   );
