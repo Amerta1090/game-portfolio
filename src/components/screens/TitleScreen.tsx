@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Vector3 } from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../game/stores/gameStore';
+import { usePlayerStore } from '../../game/stores/playerStore';
 import { useProgressStore } from '../../game/stores/progressStore';
 import { audioManager } from '../../utils/audio';
 
@@ -8,8 +10,18 @@ export function TitleScreen() {
   const [showStart, setShowStart] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
   const setScreen = useGameStore((s) => s.setScreen);
+  const moveTo = usePlayerStore((s) => s.moveTo);
+  const rotateTo = usePlayerStore((s) => s.rotateTo);
   const hasSave = useProgressStore((s) => s.fragments.length > 0 || s.visitedRooms.length > 0);
   const load = useProgressStore((s) => s.load);
+
+  function startGame() {
+    moveTo(new Vector3(0, 0, 0));
+    rotateTo(0);
+    setFadeOut(true);
+    audioManager.playSfx('interact');
+    setTimeout(() => setScreen('lobby'), 800);
+  }
 
   useEffect(() => {
     document.getElementById('loading-screen')?.remove();
@@ -22,22 +34,16 @@ export function TitleScreen() {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Enter' && showStart && !fadeOut) {
-        setFadeOut(true);
-        audioManager.playSfx('interact');
-        setTimeout(() => {
-          setScreen('lobby');
-        }, 800);
+        startGame();
       }
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showStart, fadeOut, setScreen]);
+  }, [showStart, fadeOut, startGame]);
 
   function handleContinue() {
     load();
-    setFadeOut(true);
-    audioManager.playSfx('interact');
-    setTimeout(() => setScreen('lobby'), 800);
+    startGame();
   }
 
   return (
