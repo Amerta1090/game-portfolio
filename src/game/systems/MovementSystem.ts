@@ -37,22 +37,15 @@ export function computeMovement(
   const normF = input.forward / len;
   const normS = input.strafe / len;
 
-  const angle = Math.atan2(normF, normS);
-  const targetRotation = angle;
-
-  const rot = Math.atan2(
-    Math.sin(targetRotation) + Math.sin(rotation),
-    Math.cos(targetRotation) + Math.cos(rotation),
-  );
-
   const speed = PLAYER_SPEED * delta;
-  const dx = Math.sin(rot) * speed;
-  const dz = Math.cos(rot) * speed;
 
-  const newX = currentX + dx;
-  const newZ = currentZ + dz;
+  const dx = normF * Math.sin(rotation) + normS * Math.cos(rotation);
+  const dz = normF * Math.cos(rotation) - normS * Math.sin(rotation);
+
+  const newX = currentX + dx * speed;
+  const newZ = currentZ + dz * speed;
 
   const clamped = clampToBounds(newX, newZ, radius, bounds);
 
-  return { x: clamped.x, z: clamped.z, rotation: rot };
+  return { x: clamped.x, z: clamped.z, rotation };
 }
